@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitter Social</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<>
+    <h1>WelCome <%= locals.name %></h1>
+    <div>
+        <h2>Your Details</h2>
+        <p>Username: <%= locals.username %></p>
+        <p>Email: <%= locals.email %></p>
+    </div>
+    <div class="friends">
+        <h2>Your Friends</h2>
+        <ul>
+            <% locals.friends.forEach(friend => { %>
+                <li><%= friend %>
+                    <form action="/users/friends/remove" method="POST">
+                        <input type="hidden" name="friendId" value="<%= friend.id%>">
+                        <button>Remove Friend</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+    <div class="search">
+        <h2>Search for Friends</h2>
+        <form action="/search" method="POST">
+            <input type="text" name="search" placeholder="Search for friends">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="search-results">
+        <h2>all users</h2>
+        <ul>
+            <% locals.allUsers.forEach(user => { %>
+                <li><%= user.firstName %> 
+                    <form action="/users/friends/add" method="POST">
+                        <input type="hidden" name="friendId" value="<%= user.id %>">
+                        <button type="submit">Add Friend</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+
+    <div class="friend-requests">
+        <h2>Friend Requests</h2>
+        <ul>
+            <% locals.friendRequests.forEach(request => { %>
+                <li><%= request.sender %>
+                    <form action="/users/friends/accept" method="POST">
+                        <input type="hidden" name="friendRequestId" value="<%= request.id %>">
+                        <button type="submit">Accept</button>
+                    </form>
+                    <form action="/users/friends/reject" method="POST">
+                        <input type="hidden" name="friendRequestId" value="<%= request.id %>">
+                        <button type="submit">Reject</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+
+
+    <form action="users/signOut" method="GET">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
